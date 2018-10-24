@@ -4,10 +4,7 @@ function check_login()
  var pass=$("#password").val();
  if(name=="nuadmin" && pass=="nuadmin")
  {
-  alert("登录成功！");
-  $("#user_name").val("");
-  $("#password").val("");
-
+  window.location.href = `index.html?key=${name}`;
  }
  else
  {

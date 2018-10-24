@@ -67,27 +67,8 @@ body{
 .bgcolor-11{ background: #3755ad; color: #fff;}/*dark blue*/
 .bgcolor-12{ background: #3498DB; color: #fff;}/*light blue*/
 .bgcolor-20{ background: #494A5F;color: #D5D6E2;}
-/* Header */
-.htmleaf-header{
-	padding: 1em 190px 1em;
-	letter-spacing: -1px;
-	text-align: center;
-	background: #66677c;
-}
-.htmleaf-header h1 {
-	color: #D5D6E2;
-	font-weight: 600;
-	font-size: 2em;
-	line-height: 1;
-	margin-bottom: 0;
-}
-.htmleaf-header h1 span {
-	display: block;
-	font-size: 60%;
-	font-weight: 400;
-	padding: 0.8em 0 0.5em 0;
-	color: #c3c8cd;
-}
+
+
 /*nav*/
 .htmleaf-demo a{color: #fff;text-decoration: none;}
 .htmleaf-demo{width: 100%;padding-bottom: 1.2em;}

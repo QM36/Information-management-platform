@@ -1,0 +1,22 @@
+#htmleaf-container {
+	background-color: #eff0f4;
+	height: 100%;
+}
+#container {
+	background-color: #fff;
+	border-radius: 5px;
+	margin-bottom: 50px;
+}
+#table {
+	margin: 0 20px 0 20px;
+}
+#user {
+	float: right;
+}
+#add {
+	float: right;
+}
+#pagination {
+	float: right;
+	margin-right: 20px;
+}
