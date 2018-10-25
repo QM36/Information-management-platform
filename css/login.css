@@ -3,6 +3,21 @@
   padding: 8% 0 0;
   margin: auto;
 }
+#log-alert {
+  width: 30%;
+  z-index: 999999;
+  position: absolute;
+  display:none;
+  margin-left: 35%;
+}
+#reg-alert {
+  width: 30%;
+  z-index: 999999;
+  position: absolute;
+  display:none;
+  margin-left: 35%;
+}
+
 .form {
   position: relative;
   z-index: 1;

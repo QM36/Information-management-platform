@@ -12,6 +12,8 @@
 }
 #user {
 	float: right;
+	margin-right: 80px;
+
 }
 #add {
 	float: right;
@@ -19,4 +21,7 @@
 #pagination {
 	float: right;
 	margin-right: 20px;
+}
+#logo {
+	margin-left: 50px;
 }

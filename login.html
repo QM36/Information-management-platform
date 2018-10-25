@@ -8,18 +8,22 @@
 	<link rel="stylesheet" type="text/css" href="css/normalize.css" />
 	<link rel="stylesheet" type="text/css" href="css/htmleaf-demo.css">
 	<link rel="stylesheet" type="text/css" href="css/login.css">
-
+	<link href="css/bootstrap.min.css" rel="stylesheet">
+	<link href="css/bootstrap-theme.min.css" rel="stylesheet">
+	
 </head>
 <body>
-	<div class="htmleaf-container">
+	<div class="htmleaf-container" style="margin-top:60px">
 		<p class="center">登录用户名为：nuadmin，密码为nuadmin</p>
 		<p class="center">在用户名和密码错误时，点击登录按钮可以看到表单的摇晃效果。</p>
+		<div class="alert alert-warning" role="alert" id="log-alert">账号或密码错误</div>
+		<div class="alert alert-success" role="alert" id="reg-alert">注册成功</div>
 		<div id="wrapper" class="login-page">
 		  <div id="login_form" class="form">
 		    <form class="register-form">
 		      <input type="text" placeholder="用户名" id="r_user_name"/>
 		      <input type="password" placeholder="密码" id="r_password" />
-		      <input type="text" placeholder="电子邮件" id="r_emial"/>
+		      <input type="text" placeholder="电子邮件" id="r_email"/>
 		      <button id="create">创建账户</button>
 		      <p class="message">已经有了一个账户? <a href="#">立刻登录</a></p>
 		    </form>
@@ -32,8 +36,9 @@
 		  </div>
 		</div>
 	</div>
-	
+
 	<script src="js/jquery-2.1.1.min.js"></script>
 	<script src="js/login.js"></script>
+	<script src="js/bootstrap.js"></script>
 </body>
 </html>

@@ -6,8 +6,13 @@ Bootstable
 */
   "use strict";
   //Global variables
-
-
+var key = window.location.search.match(/(?!u)(key=)([^&]+)/);
+if (!key) {
+    window.location.href = "login.html";
+}else {
+    console.log("用户"+key[2]+"登录");
+    // 获取用户信息
+}
 $.ajax({
     url: 'https://www.easy-mock.com/mock/5bc733bedc36971c160cabdb/manage/getallinfo',
     type: 'GET',
