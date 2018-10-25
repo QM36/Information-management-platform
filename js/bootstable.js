@@ -41,6 +41,7 @@ $.ajax({
     var colEdicHtml = `<td name="buttons">${newColHtml}</td>`;
     for(var i = 0; i < response.data.length; i++) {
     html += `<tr>
+                <td>${response.data[i].regId}</td>
                 <td>${response.data[i].name}</td>
                 <td>${response.data[i].institute}</td>
                 <td>${response.data[i].major}</td>
@@ -65,6 +66,27 @@ $.ajax({
 .always(function() {
     console.log("complete");
 });
+
+$("#logout").click(function() {
+    $.ajax({
+        url: 'https://www.easy-mock.com/mock/5bc733bedc36971c160cabdb/manage/logout',
+        type: 'GET',
+        dataType: 'json',
+    })
+    .done(function(response) {
+        if(response.code == 200) {
+            window.location.href = "login.html";
+        }
+    })
+    .fail(function() {
+        console.log("error");
+    })
+    .always(function() {
+        console.log("complete");
+    });
+});
+
+
 
 var params = null; 
 var colsEdi =null;
