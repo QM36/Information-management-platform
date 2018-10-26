@@ -7,20 +7,7 @@ Bootstable
   "use strict";
   //Global variables
 var key = window.location.search.match(/(?!u)(key=)([^&]+)/);
-if (!key) {
-    window.location.href = "login.html";
-}else {
-    console.log("用户"+key[2]+"登录");
-    // 获取用户信息
-}
-$.ajax({
-    url: 'https://www.easy-mock.com/mock/5bc733bedc36971c160cabdb/manage/getallinfo',
-    type: 'GET',
-    dataType: 'json',
-})
-.done(function(response) {
-    var html = "";
-    var newColHtml = 
+var newColHtml = 
       `<div class="btn-group pull-right">
             <button id="bEdit" type="button" class="btn btn-sm btn-default" onclick="rowEdit(this);">
                 <span class="glyphicon glyphicon-pencil" > </span>
@@ -38,27 +25,47 @@ $.ajax({
                 <span class="glyphicon glyphicon-remove" > </span>
             </button>
        </div>`;
-    var colEdicHtml = `<td name="buttons">${newColHtml}</td>`;
+var colEdicHtml = `<td name="buttons">${newColHtml}</td>`;
+if (!key) {
+    window.location.href = "login.html";
+}else {
+    console.log("用户"+key[2]+"登录");
+    // 获取用户信息
+}
+$.ajax({
+    url: 'https://www.easy-mock.com/mock/5bc733bedc36971c160cabdb/manage/getallinfo',
+    type: 'GET',
+    dataType: 'json',
+})
+.done(function(response) {
+    var html = "";
     for(var i = 0; i < response.data.length; i++) {
     html += `<tr>
-                <td>${response.data[i].regId}</td>
-                <td>${response.data[i].name}</td>
-                <td>${response.data[i].institute}</td>
-                <td>${response.data[i].major}</td>
-                <td>${response.data[i].stuId}</td>
-                <td>${response.data[i].email}</td>
-                <td>${response.data[i].sex}</td>
-                <td>${response.data[i].phone}</td>
-                <td>${response.data[i].positionCode}</td>
-                <td>${response.data[i].registrationTime}</td>
-                <td><button>查看</button></td>
-             </tr>`
+                <td class="edit">${response.data[i].regId}</td>
+                <td class="edit">${response.data[i].name}</td>
+                <td class="edit">${response.data[i].institute}</td>
+                <td class="edit">${response.data[i].major}</td>
+                <td class="edit">${response.data[i].stuId}</td>
+                <td class="edit">${response.data[i].email}</td>
+                <td class="edit">${response.data[i].sex}</td>
+                <td class="edit">${response.data[i].phone}</td>
+                <td class="edit">${response.data[i].positionCode}</td>
+                <td class="edit">${response.data[i].registrationTime}</td>
+                <td name="info">
+                <button type="button" class="btn btn-warning" title="个人简介"
+                        data-container="body" data-toggle="popover" data-placement="top"
+                        data-content="${response.data[i].subject}">
+                    查看详情
+                </button>
+                </td>
+            </tr>`
     }
     console.log(response.data);
     $("#tbody").empty();
     $("#tbody").append(html);
     $('thead tr').append('<th name="buttons"></th>');  //encabezado vacío
     $('tbody tr').append(colEdicHtml);
+    $("[data-toggle='popover']").popover();
 })
 .fail(function() {
     console.log("error");
@@ -86,35 +93,33 @@ $("#logout").click(function() {
     });
 });
 
-
-
 var params = null; 
 var colsEdi =null;
     
 $.fn.SetEditable = function (options) {
-var defaults = {
-    columnsEd: null,         //Index to editable columns. If null all td editables. Ex.: "1,2,3,4,5"
-    $addButton: null,        //Jquery object of "Add" button
-    onEdit: function() {},   //Called after edition
-	onBeforeDelete: function() {}, //Called before deletion
-    onDelete: function() {}, //Called after deletion
-    onAdd: function() {}     //Called when added a new row
-};
-params = $.extend(defaults, options);
+    var defaults = {
+        columnsEd: null,         //Index to editable columns. If null all td editables. Ex.: "1,2,3,4,5"
+        $addButton: null,        //Jquery object of "Add" button
+        onEdit: function() {},   //Called after edition
+    	onBeforeDelete: function() {}, //Called before deletion
+        onDelete: function() {}, //Called after deletion
+        onAdd: function() {}     //Called when added a new row
+    };
+    params = $.extend(defaults, options);
 
-var $tabedi = this;   //Read reference to the current table, to resolve "this" here.
-//Process "addButton" parameter
-if (params.$addButton != null) {
-    //Se proporcionó parámetro
-    params.$addButton.click(function() {
-        rowAddNew($tabedi.attr("id"));
-    });
-}
-//Process "columnsEd" parameter
-if (params.columnsEd != null) {
-    //Extract felds
-    colsEdi = params.columnsEd.split(',');
-}
+    var $tabedi = this;   //Read reference to the current table, to resolve "this" here.
+    //Process "addButton" parameter
+    if (params.$addButton != null) {
+        //Se proporcionó parámetro
+        params.$addButton.click(function() {
+            rowAddNew($tabedi.attr("id"));
+        });
+    }
+    //Process "columnsEd" parameter
+    if (params.columnsEd != null) {
+        //Extract felds
+        colsEdi = params.columnsEd.split(',');
+    }
 };
 function IterarCamposEdit($cols, tarea) {
 //Itera por los campos editables de una fila
@@ -189,7 +194,7 @@ function rowCancel(but) {
 }
 function rowEdit(but) {  //Inicia la edición de una fila
     var $row = $(but).parents('tr');  //accede a la fila
-    var $cols = $row.find('td');  //lee campos
+    var $cols = $row.find('.edit');  //lee campos
     if (ModoEdicion($row)) return;  //Ya está en edición
     //Pone en modo de edición
     IterarCamposEdit($cols, function($td) {  //itera por la columnas
@@ -233,7 +238,9 @@ var $tab_en_edic = $("#" + tabId);  //Table to edit
         $cols.each(function() {
             if ($(this).attr('name')=='buttons') {
                 //Es columna de botones
-            } else {
+            }else if ($(this).attr('name')=='info') {
+
+            }else {
                 $(this).html('');  //limpia contenido
             }
         });
