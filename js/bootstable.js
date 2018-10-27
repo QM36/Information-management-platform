@@ -13,11 +13,11 @@ var newColHtml =
                 <span class="glyphicon glyphicon-pencil" > </span>
             </button>
             
-            <button id="bElim" type="button" class="btn btn-sm btn-default" onclick="rowElim(this);">
+            <button id="bElim" type="button" class="btn btn-sm btn-default" onclick="rowElim(this);" data-toggle="modal" data-target="#myModal">
                 <span class="glyphicon glyphicon-trash" > </span>
             </button>
             
-            <button id="bAcep" type="button" class="btn btn-sm btn-default" style="display:none;" onclick="rowAcep(this);">
+            <button id="bAcep" type="button" class="btn btn-sm btn-default"style="display:none;" data-toggle="modal" data-target="#myModal">
                 <span class="glyphicon glyphicon-ok" > </span>
             </button>
             
@@ -32,6 +32,7 @@ if (!key) {
     console.log("用户"+key[2]+"登录");
     // 获取用户信息
 }
+
 $.ajax({
     url: 'https://www.easy-mock.com/mock/5bc733bedc36971c160cabdb/manage/getallinfo',
     type: 'GET',
@@ -54,7 +55,7 @@ $.ajax({
                 <td name="info">
                 <button type="button" class="btn btn-warning" title="个人简介"
                         data-container="body" data-toggle="popover" data-placement="top"
-                        data-content="${response.data[i].subject}">
+                        data-content="${(i === 0)?response.data[i].subject:((response.data[i].subject === response.data[i-1].subject)?"暂无数据，如需添加请点编辑按钮":response.data[i].subject)}">
                     查看详情
                 </button>
                 </td>
@@ -71,7 +72,7 @@ $.ajax({
     console.log("error");
 })
 .always(function() {
-    console.log("complete");
+    console.log("获取数据结束");
 });
 
 $("#logout").click(function() {
@@ -89,7 +90,7 @@ $("#logout").click(function() {
         console.log("error");
     })
     .always(function() {
-        console.log("complete");
+        console.log("退出登录");
     });
 });
 
@@ -167,19 +168,62 @@ function ModoEdicion($row) {
         return false;
     }
 }
+ 
 function rowAcep(but) {
-//Acepta los cambios de la edición
     var $row = $(but).parents('tr');  //accede a la fila
     var $cols = $row.find('td');  //lee campos
-    if (!ModoEdicion($row)) return;  //Ya está en edición
-    //Está en edición. Hay que finalizar la edición
-    IterarCamposEdit($cols, function($td) {  //itera por la columnas
-      var cont = $td.find('input').val(); //lee contenido del input
-      $td.html(cont);  //fija contenido y elimina controles
+    var elem = $cols.find('input');  //lee campos
+    // console.log("修改信息为：");
+    // console.log(elem[0].value);
+    // console.log(elem[1].value);
+    // console.log(elem[2].value);
+    // console.log(elem[3].value);
+    // console.log(elem[4].value);
+    // console.log(elem[5].value);
+    // console.log(elem[6].value);
+    // console.log(elem[7].value);
+    // console.log(elem[8].value);
+    // console.log(elem[9].value);
+    $.ajax({
+        url: 'https://www.easy-mock.com/mock/5bc733bedc36971c160cabdb/manage/update',
+        type: 'PUT',
+        dataType: 'json',
+        // data: {
+        //     regId: elem[0].value,
+        //     name: elem[1].value,
+        //     institute: elem[2].value,
+        //     major: elem[3].value,
+        //     stuId: elem[4].value,
+        //     email: elem[5].value,
+        //     sex: elem[6].value,
+        //     phone: elem[7].value,
+        //     positionCode: elem[8].value,
+        //     registrationTime: elem[9].value
+        // },
+    })
+    .done(function(response) {
+        if(response.code == 200) {
+            if (!ModoEdicion($row)) return;  //Ya está en edición
+            //Está en edición. Hay que finalizar la edición
+            IterarCamposEdit($cols, function($td) {  //itera por la columnas
+              var cont = $td.find('input').val(); //lee contenido del input
+              $td.html(cont);  //fija contenido y elimina controles
+            });
+            FijModoNormal(but);
+            params.onEdit($row);
+            console.log("修改成功");
+        } else {
+            console.log("修改失败");
+        } 
+    })
+    .fail(function() {
+        console.log("error");
+    })
+    .always(function() {
+        console.log("修改结束");
     });
-    FijModoNormal(but);
-    params.onEdit($row);
 }
+$('#adm').click(rowAcep($('#bAcep')));
 function rowCancel(but) {
 //Rechaza los cambios de la edición
     var $row = $(but).parents('tr');  //accede a la fila
@@ -239,7 +283,7 @@ var $tab_en_edic = $("#" + tabId);  //Table to edit
             if ($(this).attr('name')=='buttons') {
                 //Es columna de botones
             }else if ($(this).attr('name')=='info') {
-
+                $("[data-toggle='popover']").popover();
             }else {
                 $(this).html('');  //limpia contenido
             }
